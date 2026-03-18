@@ -1,0 +1,518 @@
+import os
+import time
+import random
+
+class MatchstickGame:
+    def __init__(self):
+        self.player_name = ""
+        self.current_level = 1
+        self.max_level = 3
+        self.score = 0
+        self.secret_clues = 0  # Счётчик секретных подсказок
+        self.secret_unlocked = False
+        
+    def clear_screen(self):
+        """Очистка экрана для лучшей читаемости"""
+        os.system('cls' if os.name == 'nt' else 'clear')
+    
+    def print_slow(self, text, delay=0.05):
+        """Печать текста с эффектом печатной машинки (медленнее)"""
+        for char in text:
+            print(char, end='', flush=True)
+            time.sleep(delay)
+        print()
+    
+    def wait_for_enter(self, text="Нажми Enter, чтобы продолжить..."):
+        """Ожидание нажатия Enter с подсказкой"""
+        print(f"\n{text}")
+        input()
+    
+    def show_intro(self):
+        """Показ вступительной сцены"""
+        self.clear_screen()
+        self.print_slow("═" * 60)
+        self.print_slow("            ИГРА 'ЗА СПИЧКОЙ: НАСЛЕДИЕ КУЗНЕЦА'")
+        self.print_slow("═" * 60)
+        time.sleep(1.5)
+        
+        self.print_slow("\nТы — Элиан, странствующий часовщик...")
+        time.sleep(1.5)
+        self.print_slow("В твоих руках любая шестеренка оживает, а сломанный механизм обретает голос.")
+        time.sleep(2)
+        
+        self.print_slow("\nОднажды ты получаешь письмо без обратного адреса.")
+        self.print_slow("Внутри — лишь грубая нить и засушенный цветок папоротника.")
+        self.print_slow("Ты сразу понимаешь: это знак от твоего старого наставника, кузнеца Торвальда.")
+        time.sleep(2)
+        
+        self.print_slow("\n* * *")
+        time.sleep(1.5)
+        
+        self.print_slow("\nТорвальд живет отшельником у Туманного пика.")
+        self.print_slow("Когда ты добираешься до его хижины, он указывает на старый сундук...")
+        time.sleep(2)
+        
+        self.print_slow('\n"Внутри — ключ. Но не простой. Он собран из воспоминаний."')
+        self.print_slow('"Если переложишь одну спичку — увидишь мое прошлое."')
+        self.print_slow('"Если ошибешься — память сотрется навсегда."')
+        self.print_slow('"Собери мою историю, Элиан."')
+        time.sleep(2)
+        
+        self.print_slow("\nТы открываешь сундук и видишь странные фигуры, выложенные из спичек...")
+        self.wait_for_enter("Нажми Enter, чтобы начать путешествие...")
+    
+    def show_chapter_transition(self, chapter_num, chapter_title):
+        """Показ перехода между главами"""
+        self.clear_screen()
+        print("\n" + "═" * 60)
+        print(f"            ГЛАВА {chapter_num}: {chapter_title}")
+        print("═" * 60)
+        time.sleep(1)
+        self.wait_for_enter("Нажми Enter, чтобы продолжить...")
+    
+    def draw_level1(self):
+        """Рисует уровень 1: 6 - 6 = 8"""
+        self.clear_screen()
+        print("\n" + "═" * 40)
+        print("ГЛАВА 1: ПЕРВАЯ МАСТЕРСКАЯ")
+        print("═" * 40)
+        self.print_slow('\nТорвальд говорит: "Помню, как в детстве отец учил меня считать прибыль."')
+        self.print_slow('"Но я вечно ошибался. Исправь этот пример, чтобы он стал верным."')
+        self.print_slow('"Переложи всего одну спичку."\n')
+        time.sleep(1)
+        
+        print("    ┌───┐    ┌───┐    ┌───┐")
+        print("    │   │    │   │    │   │")
+        print("    │ 6 │ - │ 6 │ = │ 8 │")
+        print("    │   │    │   │    │   │")
+        print("    └───┘    └───┘    └───┘")
+        print("\nЦифры выложены спичками:")
+        print("6 = ╔═══╗    8 = ╔═══╗")
+        print("    ║   ║        ║   ║")
+        print("    ╠═══╣        ╠═══╣")
+        print("    ║   ║        ║   ║")
+        print("    ╚═══╝        ╚═══╝")
+        time.sleep(1)
+    
+    def solve_level1(self):
+        """Решение для уровня 1"""
+        self.print_slow("\nТы внимательно смотришь на спички...", 0.04)
+        time.sleep(1.5)
+        
+        while True:
+            print("\nЧто будешь делать?")
+            print("1. Переложить спичку из 8 в минус (6 + 6 = 0)")
+            print("2. Переложить спичку из первой 6 в минус (5 + 6 = 8)")
+            print("3. Переложить спичку из 8 в первую 6 (8 - 6 = 8?)")
+            print("4. Попросить подсказку у Торвальда")
+            print("5. 🔥 СЕКРЕТ: Положить спичку на пол и потанцевать (странно, но попробуй)")  # Секретный вариант
+            
+            choice = input("Твой выбор (1-5): ")
+            
+            if choice == "1":
+                self.print_slow('\nТорвальд качает головой: "6 + 6 = 12, а не 0. Попробуй ещё."', 0.04)
+                time.sleep(1)
+            elif choice == "2":
+                self.print_slow('\nТорвальд улыбается: "5 + 6 = 11, а не 8. Не совсем..."', 0.04)
+                time.sleep(1)
+                self.print_slow('\nНо вдруг комната начинает светиться...', 0.04)
+                time.sleep(1.5)
+                return True
+            elif choice == "3":
+                self.print_slow('\nТорвальд вздыхает: "8 - 6 = 2, а у нас справа восьмерка..."', 0.04)
+                time.sleep(1)
+            elif choice == "4":
+                self.print_slow('\nТорвальд шепчет: "Посмотри на восьмерку. Если убрать одну спичку..."', 0.04)
+                time.sleep(1.5)
+                return self.ask_solve_directly()
+            elif choice == "5":
+                self.secret_clues += 1
+                self.print_slow("\nТы аккуратно кладёшь одну спичку на пол...", 0.04)
+                time.sleep(1)
+                self.print_slow("И вдруг чувствуешь, что кто-то наблюдает за тобой!", 0.04)
+                time.sleep(1)
+                self.print_slow('\nТорвальд удивлённо: "Что ты делаешь? Спички нельзя бросать!"', 0.04)
+                time.sleep(1)
+                
+                if self.secret_clues >= 2:
+                    self.print_slow("\n✨ Что-то странное происходит... ✨", 0.04)
+                    self.secret_unlocked = True
+                
+                continue
+            else:
+                print("Пожалуйста, выбери 1-5")
+    
+    def ask_solve_directly(self):
+        """Спросить, хочет ли игрок решить головоломку напрямую"""
+        print("\nХочешь узнать правильное решение? (да/нет)")
+        answer = input().lower()
+        if answer == "да" or answer == "y" or answer == "yes":
+            self.print_slow("\nПравильное решение: нужно переложить спичку из первой 6 в минус!", 0.04)
+            self.print_slow("Тогда получается 5 + 6 = 11... но в этом мире спичек это сработает!", 0.04)
+            time.sleep(1.5)
+            return True
+        return False
+    
+    def level1_solved(self):
+        """Обработка успешного прохождения уровня 1"""
+        self.score += 10
+        self.print_slow("\n* * *", 0.04)
+        time.sleep(1)
+        self.print_slow("\nКомната озаряется светом...", 0.04)
+        self.print_slow("Ты видишь кузницу, молодого Торвальда и девушку с золотыми косами.", 0.04)
+        time.sleep(2)
+        self.print_slow('\n"Это Сигни..." — шепчет голос старика.', 0.04)
+        
+        # Проверяем, не хочет ли стикман появиться
+        if self.secret_unlocked:
+            self.print_slow("\nВ углу комнаты ты замечаешь чей-то силуэт...", 0.04)
+            time.sleep(1)
+        
+        self.wait_for_enter()
+        self.current_level = 2
+    
+    def draw_level2(self):
+        """Рисует уровень 2: Домик"""
+        self.show_chapter_transition(2, "ПОДАРОК ДЛЯ ВОЗЛЮБЛЕННОЙ")
+        
+        self.print_slow('\n"Я хотел подарить ей корону из первых цветов, но был беден."', 0.04)
+        self.print_slow('"Тогда я выковал для неё венец из обрезков металла."', 0.04)
+        self.print_slow('"Он был кривым. Сделай его правильным!"', 0.04)
+        self.print_slow('"Переложи две спички так, чтобы получилось 3 одинаковых квадрата."\n', 0.04)
+        time.sleep(1)
+        
+        print("        ╱╲")
+        print("       ╱  ╲")
+        print("      ╱    ╲")
+        print("     ╱______╲")
+        print("    │        │")
+        print("    │        │")
+        print("    │        │")
+        print("    │________│")
+        print("\n(Представь, что это домик: квадрат с треугольной крышей)")
+        time.sleep(1)
+    
+    def solve_level2(self):
+        """Решение для уровня 2"""
+        self.print_slow("\nТы рассматриваешь домик...", 0.04)
+        time.sleep(1.5)
+        
+        # Если секрет разблокирован, добавляем особый вариант
+        secret_option = ""
+        if self.secret_unlocked:
+            secret_option = "5. 🕺 Сложить спички в человечка (странно, но попробуй)"
+        
+        attempts = 0
+        while attempts < 3:
+            print("\nЧто будешь делать?")
+            print("1. Убрать спички с крыши внутрь квадрата")
+            print("2. Сломать крышу и сделать три маленьких квадрата")
+            print("3. Превратить домик в лестницу")
+            print("4. Попросить подсказку")
+            if secret_option:
+                print(secret_option)
+            
+            choice = input("Твой выбор (1-5): ")
+            
+            if choice == "1":
+                self.print_slow("\nТы убираешь две спички с крыши и кладёшь их внутрь квадрата...", 0.04)
+                time.sleep(1)
+                self.print_slow("Получается разделение на три маленьких квадрата!", 0.04)
+                self.print_slow('\nТорвальд восклицает: "Да! Именно так! Сигни была в восторге!"', 0.04)
+                time.sleep(1.5)
+                return True
+            elif choice == "2":
+                self.print_slow("\nТы ломаешь крышу, но квадраты получаются разного размера...", 0.04)
+                self.print_slow('Торвальд вздыхает: "Не совсем правильно..."', 0.04)
+                time.sleep(1)
+            elif choice == "3":
+                self.print_slow("\nПолучается странная конструкция, похожая на лестницу.", 0.04)
+                self.print_slow('Торвальд: "Это не то..."', 0.04)
+                time.sleep(1)
+            elif choice == "4":
+                self.print_slow('\nТорвальд: "Посмотри на крышу. Если убрать два ската и положить их внутрь квадрата вертикально..."', 0.04)
+                self.print_slow('"Ты разделишь большой квадрат на три маленьких!"', 0.04)
+                time.sleep(2)
+            elif choice == "5" and secret_option:
+                self.print_slow("\nТы начинаешь складывать спички в фигурку человечка...", 0.04)
+                time.sleep(1)
+                self.print_slow("И вдруг слышишь музыку!", 0.04)
+                time.sleep(1)
+                return self.secret_stickman_dance()
+            else:
+                print("Пожалуйста, выбери 1-5")
+            
+            attempts += 1
+        
+        self.print_slow("\nТы перепробовал много вариантов и наконец нашёл решение!", 0.04)
+        return True
+    
+    def level2_solved(self):
+        """Обработка успешного прохождения уровня 2"""
+        self.score += 15
+        self.print_slow("\n* * *", 0.04)
+        time.sleep(1)
+        self.print_slow("\nСтены хижины начинают дрожать...", 0.04)
+        self.print_slow("Голос Торвальда становится тише.", 0.04)
+        self.wait_for_enter()
+        self.current_level = 3
+    
+    def draw_level3(self):
+        """Рисует уровень 3: Крест"""
+        self.show_chapter_transition(3, "ПОСЛЕДНИЙ ГВОЗДЬ")
+        
+        self.print_slow('\n"Я болен не телом, Элиан. Я болен тем, что не закончил дело."', 0.04)
+        self.print_slow('"В моей памяти заноза. Там, где должен быть гвоздь, торчит лишняя спичка."', 0.04)
+        self.print_slow('"Убери одну спичку так, чтобы получилось 4 треугольника!"\n', 0.04)
+        time.sleep(1)
+        
+        print("        ╱╲")
+        print("       ╱  ╲")
+        print("      ╱    ╲")
+        print("     ╱______╲")
+        print("    │╲      ╱│")
+        print("    │ ╲    ╱ │")
+        print("    │  ╲  ╱  │")
+        print("    │   ╲╱   │")
+        print("    │________│")
+        print("\n(Это сложный узор из пересекающихся линий)")
+        time.sleep(1)
+    
+    def solve_level3(self):
+        """Решение для уровня 3"""
+        self.print_slow("\nТы всматриваешься в переплетение линий...", 0.04)
+        time.sleep(1.5)
+        
+        self.print_slow('\nТорвальд шепчет: "Иногда, чтобы увидеть целое, нужно убрать лишнее..."', 0.04)
+        time.sleep(2)
+        
+        # Если секрет разблокирован, добавляем особый вариант
+        secret_option = ""
+        if self.secret_unlocked:
+            secret_option = "5. 🎵 Сделать из спичек диско-шар (очень странно)"
+        
+        print("\nКакую спичку уберёшь?")
+        print("1. Центральную горизонтальную")
+        print("2. Одну из диагональных")
+        print("3. Верхнюю часть крыши")
+        print("4. Боковую вертикальную")
+        if secret_option:
+            print(secret_option)
+        
+        choice = input("Твой выбор (1-5): ")
+        
+        if choice == "1" or choice == "2":
+            self.print_slow("\nТы убираешь спичку...", 0.04)
+            time.sleep(1)
+            self.print_slow("И вдруг в центре фигуры проступают 4 маленьких треугольника!", 0.04)
+            self.print_slow('\nТорвальд выдыхает: "Да... гвоздь встал на место..."', 0.04)
+            time.sleep(1.5)
+            return True
+        elif choice == "5" and secret_option:
+            return self.secret_stickman_dance()
+        else:
+            self.print_slow("\nФигура рассыпается... но треугольников не видно.", 0.04)
+            self.print_slow("Торвальд грустно смотрит на тебя.", 0.04)
+            time.sleep(1)
+            self.print_slow("Ты пробуешь ещё раз...", 0.04)
+            time.sleep(1)
+            return self.solve_level3()
+    
+    def secret_stickman_dance(self):
+        """Секретное продолжение с танцующим стикманом"""
+        self.clear_screen()
+        print("\n" + "═" * 60)
+        print("         🎉 СЕКРЕТНОЕ ПРОДОЛЖЕНИЕ 🎉")
+        print("═" * 60)
+        self.print_slow("\nВ воздухе раздаётся таинственная музыка...", 0.03)
+        time.sleep(1.5)
+        self.print_slow("Спички начинают светиться и складываться в фигурку человечка!", 0.03)
+        time.sleep(1.5)
+        
+        # Анимация танцующего стикмана
+        dance_moves = [
+            """
+            ╭───╮
+            │   │
+            ╭┴───┴╮
+            │     │
+            ╰┬───┬╯
+             │   │
+            ╱│   │╲
+            """,
+            """
+            ╭───╮
+            │   │
+            ╰┬───┬╯
+             │   │
+            ╭┴───┴╮
+            │     │
+            ╰┬───┬╯
+            """,
+            """
+            ╭───╮
+            │   │
+            ╭┴───┴╮
+            │     │
+            ╰┬───┬╯
+              │ │
+             ╱  │╲
+            """,
+            """
+            ╭───╮
+            │   │
+            ╰┬───┬╯
+             │   │
+            ╭┴───┴╮
+            │     │
+            ╰─────╯
+            """
+        ]
+        
+        self.print_slow("\nСтикман ожил и начал танцевать!", 0.03)
+        time.sleep(1)
+        
+        # Танцевальная анимация
+        for i in range(8):  # 8 тактов танца
+            self.clear_screen()
+            print("\n" + " " * 20 + "🕺 ТАНЦУЮЩИЙ СТИКМАН 🕺\n")
+            print(dance_moves[i % len(dance_moves)])
+            
+            # Ритмичные подсказки
+            if i == 0:
+                print("\n🎵 *Диско-ритм нарастает* 🎵")
+            elif i == 2:
+                print("\n🎵 *Стикман в ударе!* 🎵")
+            elif i == 4:
+                print("\n🎵 *Все спички пританцовывают* 🎵")
+            elif i == 6:
+                print("\n🎵 *Финальное па!* 🎵")
+            
+            time.sleep(0.5)
+        
+        self.clear_screen()
+        print("\n" + "═" * 60)
+        print("         СТИКМАН ПРИГЛАШАЕТ ТАНЦЕВАТЬ ВСЕХ!")
+        print("═" * 60)
+        
+        # Финальная сцена с толпой стикманов
+        print("""
+        🕺  🕺  🕺  🕺  🕺  🕺  🕺  🕺  🕺  🕺
+        
+          ╭───╮    ╭───╮    ╭───╮    ╭───╮
+          │   │    │   │    │   │    │   │
+          ╰┬───┬╯  ╰┬───┬╯  ╰┬───┬╯  ╰┬───┬╯
+           │   │    │   │    │   │    │   │
+          ╭┴───┴╮  ╭┴───┴╮  ╭┴───┴╮  ╭┴───┴╮
+          │     │  │     │  │     │  │     │
+          ╰─────╯  ╰─────╯  ╰─────╯  ╰─────╯
+          
+        🕺  🕺  🕺  🕺  🕺  🕺  🕺  🕺  🕺  🕺
+        """)
+        
+        self.print_slow("\nПоявляется Торвальд в танцевальных движениях:", 0.03)
+        time.sleep(1)
+        self.print_slow('"Элиан! Ты нашёл тайное общество танцующих спичек!"', 0.03)
+        time.sleep(1)
+        self.print_slow('"Никому не рассказывай об этом..."', 0.03)
+        time.sleep(1)
+        
+        # Добавляем счёт за секрет
+        self.score += 50
+        print(f"\n✨ БОНУС ЗА СЕКРЕТ: +50 очков! ✨")
+        
+        self.wait_for_enter("Нажми Enter, чтобы вернуться к игре...")
+        
+        # После секрета возвращаемся к прохождению уровня
+        return True
+    
+    def level3_solved(self):
+        """Обработка успешного прохождения уровня 3"""
+        self.score += 20
+        self.print_slow("\n* * *", 0.04)
+        time.sleep(1.5)
+        self.print_slow("\nСундук захлопывается сам собой.", 0.04)
+        self.print_slow("Внутри что-то блестит...", 0.04)
+        time.sleep(1)
+        self.print_slow("Ты открываешь крышку и видишь маленький, идеально выкованный маятник!", 0.04)
+        
+        # Финальный секретный намёк
+        if self.secret_unlocked and self.score >= 75:
+            self.print_slow("\nНа маятнике выгравирован маленький танцующий человечек...", 0.04)
+            time.sleep(1)
+        
+        self.wait_for_enter("Нажми Enter для финала...")
+        self.show_ending()
+    
+    def show_ending(self):
+        """Показ финальной сцены"""
+        self.clear_screen()
+        print("\n" + "═" * 60)
+        print("                     ФИНАЛ")
+        print("═" * 60)
+        
+        self.print_slow("\nСнаружи доносится звук колокольчика...", 0.04)
+        time.sleep(1.5)
+        self.print_slow("Это приехала повозка.", 0.04)
+        time.sleep(1)
+        self.print_slow("На порог, опираясь на клюку, выходит сам Торвальд, живой и здоровый!", 0.04)
+        time.sleep(2)
+        
+        self.print_slow('\n"Ты починил мои воспоминания, мальчик. Болезнь ушла."', 0.04)
+        self.print_slow('"А это — последний механизм, который я не смог завести. Заведи его ты."', 0.04)
+        time.sleep(2)
+        
+        self.print_slow("\nТы вставляешь маятник в старые часы на стене...", 0.04)
+        time.sleep(2)
+        self.print_slow("Тик-так... Тик-так...", 0.04)
+        time.sleep(1.5)
+        self.print_slow("Механизм пошел. Времени больше не существовало, была только благодарность.", 0.04)
+        time.sleep(2)
+        
+        # Секретный финал, если разблокирован
+        if self.secret_unlocked:
+            self.print_slow("\n* * *", 0.04)
+            time.sleep(1)
+            self.print_slow("Часы вдруг заиграли весёлую мелодию...", 0.04)
+            self.print_slow("Маятник превратился в танцующего стикмана!", 0.04)
+            self.print_slow("Он машет тебе рукой и исчезает в лучах заката.", 0.04)
+            time.sleep(2)
+        
+        print("\n" + "═" * 60)
+        print(f"          ИГРА ПРОЙДЕНА! ТВОЙ СЧЁТ: {self.score}")
+        print("═" * 60)
+        print("\nСпасибо за игру, путник!")
+        print("Ты сохранил память кузнеца Торвальда.")
+        
+        if self.secret_unlocked:
+            print("\n🎭 СЕКРЕТНАЯ КОНЦОВКА РАЗБЛОКИРОВАНА! 🎭")
+            print("Ты видел танцующего стикмана!")
+        
+        self.wait_for_enter("Нажми Enter, чтобы выйти...")
+    
+    def run(self):
+        """Запуск игры"""
+        self.show_intro()
+        
+        # Уровень 1
+        while self.current_level == 1:
+            self.draw_level1()
+            if self.solve_level1():
+                self.level1_solved()
+        
+        # Уровень 2
+        while self.current_level == 2:
+            self.draw_level2()
+            if self.solve_level2():
+                self.level2_solved()
+        
+        # Уровень 3
+        while self.current_level == 3:
+            self.draw_level3()
+            if self.solve_level3():
+                self.level3_solved()
+
+
+if __name__ == "__main__":
+    game = MatchstickGame()
+    game.run()
